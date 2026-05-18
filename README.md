@@ -83,6 +83,20 @@ N2SF의 C/S/O 등급은 AWS 리소스에 기본적으로 존재하는 기술적 
 본 PoC에서는 N2SF 보안통제를 다음과 같이 AWS 리소스 및 Terraform 설정값과 연결합니다.
 
 
+| N2SF 통제 방향 | AWS 구현 요소 | Terraform 리소스 예시 | 검증 가능성 |
+|---|---|---|---|
+| 최소권한 | IAM Role, IAM Policy | `aws_iam_role`, `aws_iam_policy` | 부분 가능 |
+| 접근통제 | Security Group, IAM Policy | `aws_security_group`, `aws_iam_policy` | 가능 |
+| 분리 및 격리 | VPC, Subnet, Route Table | `aws_vpc`, `aws_subnet`, `aws_route_table` | 가능 |
+| 외부경계 통제 | API Gateway, WAF, Security Group | `aws_api_gateway_rest_api`, `aws_wafv2_web_acl` | 가능 |
+| 데이터 보호 | KMS, S3, DynamoDB | `aws_kms_key`, `aws_s3_bucket`, `aws_dynamodb_table` | 가능 |
+| 로그 및 감사기록 | CloudTrail, CloudWatch, S3 Log Bucket | `aws_cloudtrail`, `aws_cloudwatch_log_group`, `aws_s3_bucket` | 가능 |
+| 이상행위 탐지 | GuardDuty, AWS Config | `aws_guardduty_detector`, `aws_config_configuration_recorder` | 가능 |
+| 비밀정보 관리 | Secrets Manager, KMS | `aws_secretsmanager_secret`, `aws_kms_key` | 가능 |
+| C/S/O 등급분류 | Resource Tags | `tags.N2SF_Grade` | 부분 가능 |
+| 사고보고·승인절차 | 조직 절차 | Terraform 직접 표현 어려움 | 어려움 |
+
+
 ---
 
 5. N2SF Tags
@@ -203,3 +217,24 @@ Checkov 검증 결과는 다음 항목을 중심으로 해석합니다.
 - 실제 결제 애플리케이션의 비즈니스 로직 보안
 
 따라서 본 PoC의 결과는 “N2SF 통제 전체를 자동검증할 수 있다”는 의미가 아니라, N2SF 통제 중 Terraform 설정값과 Checkov 룰로 확인 가능한 기술적 통제 항목을 구분하기 위한 연구용 기준으로 활용됩니다.
+
+---
+
+11. Suggested Research Workflow
+```text
+N2SF 보안통제 도출
+↓
+AWS Payments 참조 아키텍처 분석
+↓
+N2SF-AWS-Terraform 매핑
+↓
+Terraform 코드 작성
+↓
+terraform validate / plan
+↓
+Checkov 검증
+↓
+PASS / FAIL 결과 분석
+↓
+자동검증 가능 / 부분 가능 / 어려움 분류
+```
