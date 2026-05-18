@@ -10,4 +10,5 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 .terraform.lock.hcl
-checkov-result.json
+checkov-result.json*.tfplan
+n2sf-poc.tfplan
