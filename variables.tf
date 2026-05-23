@@ -17,7 +17,7 @@ variable "environment" {
 }
 
 variable "n2sf_grade" {
-  description = "N2SF information grade"
+  description = "N2SF information classification (C/S/O)"
   type        = string
   default     = "S"
 }
